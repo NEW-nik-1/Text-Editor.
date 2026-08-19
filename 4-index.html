@@ -31,11 +31,45 @@ body {
     max-width: 1200px;
     margin: 10px auto;
     padding: 0 10px 15px;
+    position: relative;
 }
+
+/* ==================================================
+   МЕНЮ НЕЙРОСЕТЕЙ
+================================================== */
+
+.ai-sites {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    z-index: 50;
+}
+
+.ai-sites select {
+    width: auto;
+    min-width: 210px;
+    max-width: 280px;
+    background: #eeeeee;
+    color: #333333;
+    border: 1px solid #aaaaaa;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.ai-sites select:hover {
+    background: #d8d8d8;
+}
+
+/* ==================================================
+   ЗАГОЛОВКИ
+================================================== */
 
 h1 {
     margin: 0 0 2px;
     font-size: 22px;
+    padding-right: 230px;
 }
 
 h2 {
@@ -48,6 +82,10 @@ h2 {
     margin-bottom: 7px;
     font-size: 12px;
 }
+
+/* ==================================================
+   ПАНЕЛИ
+================================================== */
 
 .panel {
     background: #eeeeee;
@@ -323,6 +361,22 @@ textarea {
         padding: 0 6px 10px;
     }
 
+    .ai-sites {
+        position: static;
+        margin: 0 0 7px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .ai-sites select {
+        width: 100%;
+        max-width: none;
+    }
+
+    h1 {
+        padding-right: 0;
+    }
+
     #songText {
         height: 230px;
     }
@@ -348,6 +402,35 @@ textarea {
 <body>
 
 <div class="app">
+
+<!-- ==================================================
+     НЕЙРОСЕТИ ДЛЯ СОЗДАНИЯ ПЕСЕН
+================================================== -->
+
+<div class="ai-sites">
+
+    <select onchange="openAISite(this.value); this.selectedIndex=0;">
+
+        <option value="">
+            🎵 Нейросети для песен
+        </option>
+
+        <option value="https://brev.ai">
+            Brev.ai
+        </option>
+
+        <option value="https://suno.com">
+            Suno
+        </option>
+
+        <option value="https://myneuralnetworks.ru/music_generator">
+            My Neural Networks — Music Generator
+        </option>
+
+    </select>
+
+</div>
+
 
 <h1>🎵 Текст для песен</h1>
 
@@ -525,8 +608,7 @@ textarea {
 ⚡ Структура
 </button>
 
-<button
-    onclick="openFilePicker()">
+<button onclick="openFilePicker()">
 📂 Загрузить TXT
 </button>
 
@@ -538,16 +620,13 @@ textarea {
     onchange="loadTXT(event)"
 >
 
-<button
-    onclick="translateTagsToEnglish()">
+<button onclick="translateTagsToEnglish()">
 🌐 Теги → English
 </button>
 
 <button onclick="copySong()">
 📋 Копировать
 </button>
-
-<!-- НОВОЕ СОХРАНЕНИЕ НА ПК -->
 
 <button
     class="primary"
@@ -559,8 +638,7 @@ textarea {
 ⬇️ Скачать TXT
 </button>
 
-<button
-    onclick="clearEditor()">
+<button onclick="clearEditor()">
 🗑 Очистить
 </button>
 
@@ -892,6 +970,24 @@ async function initApp() {
 }
 
 initApp();
+
+
+/* ==================================================
+   НЕЙРОСЕТИ
+================================================== */
+
+function openAISite(url) {
+
+    if (!url) {
+        return;
+    }
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+}
 
 
 /* ==================================================
@@ -1991,7 +2087,35 @@ async function copySong() {
 
 
 /* ==================================================
-   НОВОЕ СОХРАНЕНИЕ НА ПК
+   ОЧИСТКА
+================================================== */
+
+function clearEditor() {
+
+    const confirmed =
+        confirm(
+            "Очистить текст песни?"
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+    songText.value =
+        "[Intro]\n\n[Outro]";
+
+    updateCounters();
+
+    saveDraft();
+
+    showStatus(
+        "Редактор очищен."
+    );
+}
+
+
+/* ==================================================
+   СОХРАНЕНИЕ НА ПК
 ================================================== */
 
 async function saveSongToPC() {
@@ -2009,12 +2133,6 @@ async function saveSongToPC() {
 
         return;
     }
-
-    /*
-       Современные Chrome / Edge / Chromium:
-       открывается системное окно сохранения.
-       Пользователь может выбрать Рабочий стол.
-    */
 
     if ("showSaveFilePicker" in window) {
 
@@ -2058,11 +2176,6 @@ async function saveSongToPC() {
 
         } catch (error) {
 
-            /*
-               Пользователь нажал "Отмена".
-               Ничего не делаем.
-            */
-
             if (
                 error &&
                 error.name ===
@@ -2080,11 +2193,6 @@ async function saveSongToPC() {
         }
     }
 
-
-    /*
-       Запасной вариант для браузеров,
-       где showSaveFilePicker отсутствует.
-    */
 
     const blob =
         new Blob(
