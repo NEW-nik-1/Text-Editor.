@@ -1035,7 +1035,6 @@ let currentTag = "";
 
 let statusTimer;
 
-let draftTimer;
 
 
 /* ==================================================
@@ -1157,7 +1156,6 @@ function appendBlock(block) {
 
     updateCounters();
 
-    saveDraftDelayed();
 }
 
 
@@ -1242,7 +1240,6 @@ function insertAtCursor(text) {
 
     updateCounters();
 
-    saveDraftDelayed();
 
     showStatus(
         text + " добавлено."
@@ -2151,7 +2148,6 @@ function generateStructure() {
 
     updateCounters();
 
-    saveDraft();
 
     showStatus(
         "Структура создана."
@@ -2217,7 +2213,6 @@ function clearEditor() {
 
     updateCounters();
 
-    saveDraft();
 
     showStatus(
         "Редактор очищен."
@@ -2286,9 +2281,6 @@ async function saveSongToPC() {
                 "Текст сохранён на ПК."
             );
 
-
-            saveDraft();
-
             return;
 
         } catch (error) {
@@ -2354,7 +2346,6 @@ async function saveSongToPC() {
     );
 
 
-    saveDraft();
 }
 
 
@@ -2476,9 +2467,6 @@ function loadTXT(event) {
             ensureIntroOutro();
 
             updateCounters();
-
-            saveDraft();
-
 
             showStatus(
                 "Готовый текст загружен."
@@ -2752,7 +2740,6 @@ function translateTagsToEnglish() {
 
     updateCounters();
 
-    saveDraft();
 
 
     if (changed) {
@@ -2771,96 +2758,9 @@ function translateTagsToEnglish() {
 
 
 /* ==================================================
-   ЧЕРНОВИК
+   ЧЕРНОВИКИ ОТКЛЮЧЕНЫ
+   Автосохранение черновика отключено.
 ================================================== */
-
-function saveDraft() {
-
-    localStorage.setItem(
-        "songBuilderDraft",
-        JSON.stringify({
-            text: songText.value
-        })
-    );
-}
-
-
-function saveDraftDelayed() {
-
-    clearTimeout(draftTimer);
-
-    draftTimer =
-        setTimeout(
-            saveDraft,
-            500
-        );
-}
-
-
-function restoreDraft() {
-
-    try {
-
-        const raw =
-            localStorage.getItem(
-                "songBuilderDraft"
-            );
-
-
-        if (!raw) {
-
-            songText.value =
-                "[Intro]\n\n[Outro]";
-
-            return;
-        }
-
-
-        const draft =
-            JSON.parse(raw);
-
-
-        if (
-            draft &&
-            draft.text
-        ) {
-
-            const restore =
-                confirm(
-                    "Найден последний черновик.\n\n" +
-                    "Восстановить его?"
-                );
-
-
-            if (restore) {
-
-                songText.value =
-                    draft.text;
-
-            } else {
-
-                songText.value =
-                    "[Intro]\n\n[Outro]";
-            }
-
-        } else {
-
-            songText.value =
-                "[Intro]\n\n[Outro]";
-        }
-
-    } catch {
-
-        songText.value =
-            "[Intro]\n\n[Outro]";
-    }
-
-
-    ensureIntroOutro();
-
-    updateCounters();
-}
-
 
 /* ==================================================
    ИЗМЕНЕНИЕ ТЕКСТА
@@ -2871,8 +2771,6 @@ songText.addEventListener(
     () => {
 
         updateCounters();
-
-        saveDraftDelayed();
     }
 );
 
@@ -2960,11 +2858,6 @@ songText.value =
     "[Intro]\n\n[Outro]";
 
 updateCounters();
-
-setTimeout(
-    restoreDraft,
-    300
-);
 
 </script>
 
