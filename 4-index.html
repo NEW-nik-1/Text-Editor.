@@ -1,1 +1,155 @@
 
+<!-- Аудиоплеер над чатом -->
+<div id="radio-player">
+  <div class="radio-title">🎵 RADIO</div>
+
+  <button id="play-btn" type="button">▶</button>
+
+  <input
+    id="volume"
+    type="range"
+    min="0"
+    max="1"
+    step="0.01"
+    value="0.8"
+    aria-label="Громкость"
+  >
+
+  <span id="volume-icon">🔊</span>
+
+  <audio
+    id="radio-audio"
+    preload="none"
+    src="https://s05.volnorez.com/live-app/tmp/6aac4338-77666a80b93c37e2275cb30b73c493c1e4a27">
+  </audio>
+</div>
+
+<style>
+  #radio-player {
+    position: fixed;
+    right: 20px;
+    bottom: 560px;
+    width: 300px;
+    height: 58px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 8px 12px;
+    border-radius: 14px;
+
+    background: linear-gradient(145deg, #555, #303030);
+    border: 1px solid #686868;
+    box-shadow:
+      0 8px 25px rgba(0,0,0,.35),
+      inset 0 1px 0 rgba(255,255,255,.12);
+
+    color: white;
+    font-family: Arial, sans-serif;
+    z-index: 999998;
+  }
+
+  .radio-title {
+    font-size: 11px;
+    font-weight: bold;
+    color: #ddd;
+    letter-spacing: 1px;
+    margin-right: 2px;
+  }
+
+  #play-btn {
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: #777;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,.35);
+    transition: .2s;
+  }
+
+  #play-btn:hover {
+    background: #999;
+    transform: scale(1.05);
+  }
+
+  #volume {
+    flex: 1;
+    height: 4px;
+    accent-color: #bbb;
+    cursor: pointer;
+  }
+
+  #volume-icon {
+    font-size: 15px;
+  }
+
+  @media (max-width: 500px) {
+    #radio-player {
+      right: 10px;
+      bottom: 570px;
+      width: calc(100vw - 20px);
+    }
+  }
+</style>
+
+<script>
+  const audio = document.getElementById('radio-audio');
+  const playBtn = document.getElementById('play-btn');
+  const volume = document.getElementById('volume');
+  const volumeIcon = document.getElementById('volume-icon');
+
+  audio.volume = 0.8;
+
+  playBtn.addEventListener('click', async () => {
+    if (audio.paused) {
+      try {
+        await audio.play();
+        playBtn.textContent = '❚❚';
+      } catch (error) {
+        console.log('Не удалось запустить радио:', error);
+      }
+    } else {
+      audio.pause();
+      playBtn.textContent = '▶';
+    }
+  });
+
+  volume.addEventListener('input', () => {
+    audio.volume = volume.value;
+
+    if (audio.volume == 0) {
+      volumeIcon.textContent = '🔇';
+    } else if (audio.volume < 0.5) {
+      volumeIcon.textContent = '🔉';
+    } else {
+      volumeIcon.textContent = '🔊';
+    }
+  });
+
+  audio.addEventListener('pause', () => {
+    playBtn.textContent = '▶';
+  });
+
+  audio.addEventListener('play', () => {
+    playBtn.textContent = '❚❚';
+  });
+</script>
+
+<!-- Чат -->
+<script
+  src="https://chatodrom.com/chat/embed.js"
+  data-title="Чат"
+  data-open="true"
+  data-chat-id="chat-radio"
+  data-mode="floating"
+  data-position="bottom-right"
+  data-width="300"
+  data-height="520"
+  data-offset-x="20"
+  data-offset-y="20">
+</script>
