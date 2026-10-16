@@ -1,1 +1,206 @@
 
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MUZER play VK Mini App</title>
+
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #volnorez {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: calc(100vh - 28px);
+            border: none;
+            display: block;
+        }
+
+        .bottom-bar {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 28px;
+            background: #262626;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            box-sizing: border-box;
+            padding-left: 10px;
+        }
+
+        .author {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            font-weight: 400;
+            text-decoration: none;
+            color: transparent;
+
+            background: linear-gradient(
+                90deg,
+                #aaa,
+                #fff,
+                #aaa,
+                #fff,
+                #aaa
+            );
+
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: wave 3s linear infinite;
+            cursor: pointer;
+        }
+
+        @keyframes wave {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 300% 50%;
+            }
+        }
+
+        /* Кнопки выбора версии */
+        .version-buttons {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+
+            width: calc(100% - 20px);
+            max-width: 420px;
+            box-sizing: border-box;
+        }
+
+        .version-button {
+            flex: 1;
+            min-width: 0;
+            padding: 12px 10px;
+
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+
+            background: #262626;
+            color: #fff;
+
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            box-sizing: border-box;
+        }
+
+        .version-button:hover {
+            background: #444;
+            transform: translateY(-2px);
+        }
+
+        .version-button:active {
+            transform: scale(0.97);
+        }
+
+        .mobile-button {
+            background: #0077ff;
+        }
+
+        .mobile-button:hover {
+            background: #0066dd;
+        }
+
+        .pc-button {
+            background: #262626;
+        }
+
+        @media (max-width: 360px) {
+            .version-buttons {
+                gap: 6px;
+            }
+
+            .version-button {
+                padding: 11px 5px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Плеер -->
+    <iframe
+        id="volnorez"
+        src="https://m.volnorez.com/pyl_dorog-fm">
+    </iframe>
+
+    <!-- Кнопки выбора версии -->
+    <div class="version-buttons">
+
+        <a
+            class="version-button mobile-button"
+            href="https://m.vk.ru/games/app54612661?section_type=public_r_app">
+            📱 Мобильная версия
+        </a>
+
+        <a
+            class="version-button pc-button"
+            href="https://vk.ru/games/app54612661?section_type=public_r_app">
+            💻 ПК версия
+        </a>
+
+    </div>
+
+    <!-- Нижняя полоска -->
+    <div class="bottom-bar">
+        <a
+            class="author"
+            href="https://vk.ru/muzer_play"
+            target="_blank"
+            rel="noopener noreferrer">
+            Автор приложения
+        </a>
+    </div>
+
+    <!-- VK Bridge -->
+    <script>
+        async function initApp() {
+            try {
+                await vkBridge.send('VKWebAppInit');
+                console.log('VK Bridge инициализирован');
+            } catch (e) {
+                console.error('Ошибка VK Bridge:', e);
+            }
+        }
+
+        initApp();
+    </script>
+
+</body>
+</html>
+```
