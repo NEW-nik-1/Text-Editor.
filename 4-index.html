@@ -1,11 +1,12 @@
- ```html
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>MUZER play VK Mini App</title>
+    <title>РАДИО ПыЛь_ДоРоГ FM</title>
 
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 
@@ -18,58 +19,197 @@
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
-            overflow: hidden;
+            min-height: 100%;
             font-family: Arial, sans-serif;
-            background: #111;
+            background: #090707;
+            color: #fff;
         }
 
-        /* Экран загрузки */
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
         .welcome-screen {
-            position: fixed;
-            inset: 0;
+            position: relative;
+            isolation: isolate;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 16px;
-            background: #111;
+            gap: 24px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 40px 20px 70px;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(8, 4, 4, 0.28),
+                    rgba(8, 3, 3, 0.55) 55%,
+                    rgba(0, 0, 0, 0.82)
+                ),
+                url("radio-studio.png") center center / cover no-repeat,
+                #110707;
+        }
+
+        .welcome-screen::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background:
+                radial-gradient(
+                    ellipse at 50% 45%,
+                    transparent 5%,
+                    rgba(0, 0, 0, 0.18) 100%
+                );
         }
 
         .welcome-title {
+            max-width: 600px;
+            margin: 0;
             color: #fff;
-            font-size: 26px;
-            font-weight: bold;
+            font-size: clamp(30px, 7vw, 54px);
+            font-weight: 900;
             text-align: center;
+            line-height: 1.15;
+            text-shadow:
+                0 0 10px rgba(255, 0, 0, 0.9),
+                0 0 30px rgba(255, 0, 0, 0.55),
+                2px 3px 5px #000;
         }
 
-        .loading-text {
-            color: #aaa;
-            font-size: 14px;
+        .radio-subtitle {
+            margin-top: -12px;
+            color: #ffb5b5;
+            font-size: 13px;
+            letter-spacing: 4px;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 0 0 12px #f00;
         }
 
-        /* Нижняя полоска */
+        .version-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 360px;
+            min-height: 64px;
+            padding: 16px 22px;
+            border: 2px solid #ff3030;
+            border-radius: 50px;
+            background: rgba(65, 0, 0, 0.78);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 800;
+            text-align: center;
+            text-decoration: none;
+            box-shadow:
+                0 0 12px rgba(255, 0, 0, 0.65),
+                inset 0 0 15px rgba(255, 0, 0, 0.2);
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .version-button:hover {
+            transform: scale(1.03);
+            background: rgba(155, 0, 0, 0.9);
+            box-shadow:
+                0 0 24px rgba(255, 0, 0, 0.85),
+                inset 0 0 20px rgba(255, 50, 50, 0.25);
+        }
+
+        .version-button:active {
+            transform: scale(0.98);
+        }
+
+        .on-air {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 9px 16px;
+            border: 1px solid rgba(255, 55, 55, 0.7);
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.65);
+            color: #ff5555;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.15);
+        }
+
+        .on-air-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #ff2020;
+            box-shadow: 0 0 10px #ff2020;
+            animation: blink 1.2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.25; }
+        }
+
         .bottom-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             z-index: 10;
-
             display: flex;
             align-items: center;
-
             width: 100%;
-            height: 28px;
-            padding-left: 10px;
-
-            background: #262626;
+            min-height: 38px;
+            padding: 8px 14px;
+            border-top: 1px solid rgba(255, 70, 70, 0.3);
+            background: rgba(12, 12, 12, 0.92);
+            backdrop-filter: blur(10px);
         }
 
         .author {
-            font-family: Arial, sans-serif;
-            font-size: 10px;
-            color: #fff;
+            color: #ddd;
+            font-size: 11px;
             text-decoration: none;
+        }
+
+        .author:hover {
+            color: #ff5555;
+        }
+
+        @media (max-height: 520px) {
+            .welcome-screen {
+                gap: 14px;
+                padding-top: 20px;
+                padding-bottom: 50px;
+            }
+
+            .welcome-title {
+                font-size: 30px;
+            }
+
+            .radio-subtitle {
+                margin-top: -8px;
+            }
+
+            .version-button {
+                min-height: 52px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .on-air-dot {
+                animation: none;
+            }
+
+            .version-button {
+                transition: none;
+            }
         }
     </style>
 </head>
@@ -77,8 +217,27 @@
 <body>
 
     <main class="welcome-screen">
-        <div class="welcome-title">MUZER play</div>
-        <div class="loading-text">Открываем мобильную версию...</div>
+
+        <div class="on-air">
+            <span class="on-air-dot"></span>
+            ON AIR
+        </div>
+
+        <h1 class="welcome-title">
+            РАДИО<br>
+            ПыЛь_ДоРоГ FM
+        </h1>
+
+        <div class="radio-subtitle">
+            Твоя музыка — твоя волна
+        </div>
+
+        <a
+            class="version-button"
+            href="https://m.vk.ru/games/app54612661">
+            📱 МОБИЛЬНАЯ ВЕРСИЯ
+        </a>
+
     </main>
 
     <footer class="bottom-bar">
@@ -92,20 +251,9 @@
     </footer>
 
     <script>
-        const MOBILE_URL = 'https://m.vk.ru/games/app54612661';
-
-        async function initApp() {
-            try {
-                await vkBridge.send('VKWebAppInit');
-            } catch (e) {
-                console.error('Ошибка VK Bridge:', e);
-            }
-
-            // Автоматический переход на мобильную версию
-            window.location.replace(MOBILE_URL);
+        if (window.vkBridge) {
+            vkBridge.send('VKWebAppInit').catch(console.error);
         }
-
-        initApp();
     </script>
 
 </body>
