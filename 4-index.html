@@ -1,9 +1,10 @@
-```html
+ ```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>MUZER play VK Mini App</title>
 
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
@@ -23,6 +24,7 @@
             background: #111;
         }
 
+        /* Экран загрузки */
         .welcome-screen {
             position: fixed;
             inset: 0;
@@ -31,57 +33,40 @@
             align-items: center;
             justify-content: center;
             gap: 16px;
-            padding: 20px 20px 48px;
             background: #111;
         }
 
         .welcome-title {
-            margin-bottom: 12px;
             color: #fff;
             font-size: 26px;
             font-weight: bold;
             text-align: center;
         }
 
-        .version-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 320px;
-            min-height: 58px;
-            padding: 15px;
-            border-radius: 14px;
-            color: #fff;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
+        .loading-text {
+            color: #aaa;
+            font-size: 14px;
         }
 
-        .mobile-button {
-            background: #0077ff;
-        }
-
-        .pc-button {
-            background: #303030;
-            border: 1px solid #555;
-        }
-
+        /* Нижняя полоска */
         .bottom-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             z-index: 10;
+
             display: flex;
             align-items: center;
+
             width: 100%;
             height: 28px;
             padding-left: 10px;
+
             background: #262626;
         }
 
         .author {
+            font-family: Arial, sans-serif;
             font-size: 10px;
             color: #fff;
             text-decoration: none;
@@ -93,18 +78,7 @@
 
     <main class="welcome-screen">
         <div class="welcome-title">MUZER play</div>
-
-        <a
-            class="version-button mobile-button"
-            href="https://m.vk.ru/games/app54612661">
-            📱 МОБИЛЬНАЯ ВЕРСИЯ
-        </a>
-
-        <a
-            class="version-button pc-button"
-            href="https://vk.ru/games/app54612661">
-            💻 ПК ВЕРСИЯ
-        </a>
+        <div class="loading-text">Открываем мобильную версию...</div>
     </main>
 
     <footer class="bottom-bar">
@@ -118,6 +92,8 @@
     </footer>
 
     <script>
+        const MOBILE_URL = 'https://m.vk.ru/games/app54612661';
+
         async function initApp() {
             try {
                 await vkBridge.send('VKWebAppInit');
@@ -126,9 +102,7 @@
             }
 
             // Автоматический переход на мобильную версию
-            window.location.replace(
-                'https://m.vk.ru/games/app54612661'
-            );
+            window.location.replace(MOBILE_URL);
         }
 
         initApp();
