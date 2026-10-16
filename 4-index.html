@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>MUZER play VK Mini App</title>
 
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
@@ -24,172 +23,90 @@
             background: #111;
         }
 
-        /* Стартовый экран */
         .welcome-screen {
             position: fixed;
             inset: 0;
-            z-index: 10000;
-
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 16px;
-
             padding: 20px 20px 48px;
             background: #111;
         }
 
-        /* Название приложения */
         .welcome-title {
             margin-bottom: 12px;
             color: #fff;
             font-size: 26px;
             font-weight: bold;
             text-align: center;
-            letter-spacing: 1px;
         }
 
-        /* Кнопки */
         .version-button {
             display: flex;
             align-items: center;
             justify-content: center;
-
             width: 100%;
             max-width: 320px;
             min-height: 58px;
             padding: 15px;
-
-            border: none;
             border-radius: 14px;
-
             color: #fff;
-            font-family: Arial, sans-serif;
             font-size: 16px;
             font-weight: bold;
             text-align: center;
             text-decoration: none;
-
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-
-            transition: transform 0.15s ease, opacity 0.15s ease;
         }
 
-        .version-button:active {
-            transform: scale(0.97);
-            opacity: 0.85;
-        }
-
-        /* Мобильная версия */
         .mobile-button {
             background: #0077ff;
         }
 
-        /* ПК версия */
         .pc-button {
             background: #303030;
             border: 1px solid #555;
         }
 
-        /* Нижняя полоска */
         .bottom-bar {
             position: fixed;
-            left: 0;
             bottom: 0;
-            z-index: 10001;
-
+            left: 0;
+            z-index: 10;
             display: flex;
             align-items: center;
-
             width: 100%;
             height: 28px;
             padding-left: 10px;
-
             background: #262626;
         }
 
-        /* Автор приложения */
         .author {
-            font-family: Arial, sans-serif;
             font-size: 10px;
-            font-weight: 400;
-            color: transparent;
+            color: #fff;
             text-decoration: none;
-
-            background: linear-gradient(
-                90deg,
-                #aaa,
-                #fff,
-                #aaa,
-                #fff,
-                #aaa
-            );
-
-            background-size: 300% 100%;
-
-            -webkit-background-clip: text;
-            background-clip: text;
-
-            animation: wave 3s linear infinite;
-            cursor: pointer;
-        }
-
-        @keyframes wave {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            100% {
-                background-position: 300% 50%;
-            }
-        }
-
-        /* Маленькие экраны */
-        @media (max-width: 360px) {
-            .welcome-title {
-                font-size: 22px;
-            }
-
-            .version-button {
-                min-height: 54px;
-                font-size: 14px;
-            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Стартовый экран -->
     <main class="welcome-screen">
+        <div class="welcome-title">MUZER play</div>
 
-        <div class="welcome-title">
-            MUZER play
-        </div>
-
-        <!-- Мобильная версия -->
         <a
             class="version-button mobile-button"
-            href="https://m.vk.ru/games/app54612661?section_type=public_r_app"
-            target="_blank"
-            rel="noopener noreferrer">
+            href="https://m.vk.ru/games/app54612661">
             📱 МОБИЛЬНАЯ ВЕРСИЯ
         </a>
 
-        <!-- ПК версия: адрес указан без мобильного домена -->
         <a
             class="version-button pc-button"
-            href="https://vk.ru/games/app54612661"
-            target="_blank"
-            rel="noopener noreferrer">
+            href="https://vk.ru/games/app54612661">
             💻 ПК ВЕРСИЯ
         </a>
-
     </main>
 
-    <!-- Нижняя полоска -->
     <footer class="bottom-bar">
         <a
             class="author"
@@ -200,15 +117,18 @@
         </a>
     </footer>
 
-    <!-- VK Bridge -->
     <script>
         async function initApp() {
             try {
                 await vkBridge.send('VKWebAppInit');
-                console.log('VK Bridge инициализирован');
             } catch (e) {
                 console.error('Ошибка VK Bridge:', e);
             }
+
+            // Автоматический переход на мобильную версию
+            window.location.replace(
+                'https://m.vk.ru/games/app54612661'
+            );
         }
 
         initApp();
