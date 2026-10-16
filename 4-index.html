@@ -1,10 +1,8 @@
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>РАДИО ПыЛь_ДоРоГ FM</title>
 
@@ -42,12 +40,12 @@
             min-height: 100dvh;
             padding: 40px 20px 70px;
             overflow: hidden;
+
             background:
                 linear-gradient(
                     180deg,
-                    rgba(8, 4, 4, 0.28),
-                    rgba(8, 3, 3, 0.55) 55%,
-                    rgba(0, 0, 0, 0.82)
+                    rgba(8, 4, 4, 0.35),
+                    rgba(8, 3, 3, 0.65)
                 ),
                 url("radio-studio.png") center center / cover no-repeat,
                 #110707;
@@ -59,12 +57,47 @@
             inset: 0;
             z-index: -1;
             pointer-events: none;
-            background:
-                radial-gradient(
-                    ellipse at 50% 45%,
-                    transparent 5%,
-                    rgba(0, 0, 0, 0.18) 100%
-                );
+
+            background: radial-gradient(
+                ellipse at center,
+                transparent 5%,
+                rgba(0, 0, 0, 0.4) 100%
+            );
+        }
+
+        .on-air {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 18px;
+            border: 1px solid rgba(255, 55, 55, 0.7);
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #ff5555;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            box-shadow: 0 0 18px rgba(255, 0, 0, 0.25);
+        }
+
+        .on-air-dot {
+            width: 9px;
+            height: 9px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #ff2020;
+            box-shadow: 0 0 10px #ff2020;
+            animation: blink 1.2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.25;
+            }
         }
 
         .welcome-title {
@@ -74,7 +107,9 @@
             font-size: clamp(30px, 7vw, 54px);
             font-weight: 900;
             text-align: center;
-            line-height: 1.15;
+            line-height: 1.2;
+            overflow-wrap: anywhere;
+
             text-shadow:
                 0 0 10px rgba(255, 0, 0, 0.9),
                 0 0 30px rgba(255, 0, 0, 0.55),
@@ -85,9 +120,9 @@
             margin-top: -12px;
             color: #ffb5b5;
             font-size: 13px;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
+            line-height: 1.6;
             text-align: center;
-            text-transform: uppercase;
             text-shadow: 0 0 12px #f00;
         }
 
@@ -99,17 +134,22 @@
             max-width: 360px;
             min-height: 64px;
             padding: 16px 22px;
+
             border: 2px solid #ff3030;
             border-radius: 50px;
-            background: rgba(65, 0, 0, 0.78);
+
+            background: rgba(65, 0, 0, 0.88);
             color: #fff;
+
             font-size: 16px;
             font-weight: 800;
             text-align: center;
             text-decoration: none;
+
             box-shadow:
                 0 0 12px rgba(255, 0, 0, 0.65),
                 inset 0 0 15px rgba(255, 0, 0, 0.2);
+
             transition:
                 transform 0.2s ease,
                 background 0.2s ease,
@@ -118,7 +158,8 @@
 
         .version-button:hover {
             transform: scale(1.03);
-            background: rgba(155, 0, 0, 0.9);
+            background: rgba(155, 0, 0, 0.95);
+
             box-shadow:
                 0 0 24px rgba(255, 0, 0, 0.85),
                 inset 0 0 20px rgba(255, 50, 50, 0.25);
@@ -128,45 +169,19 @@
             transform: scale(0.98);
         }
 
-        .on-air {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            padding: 9px 16px;
-            border: 1px solid rgba(255, 55, 55, 0.7);
-            border-radius: 30px;
-            background: rgba(0, 0, 0, 0.65);
-            color: #ff5555;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 3px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.15);
-        }
-
-        .on-air-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: #ff2020;
-            box-shadow: 0 0 10px #ff2020;
-            animation: blink 1.2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.25; }
-        }
-
         .bottom-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             z-index: 10;
+
             display: flex;
             align-items: center;
+
             width: 100%;
             min-height: 38px;
             padding: 8px 14px;
+
             border-top: 1px solid rgba(255, 70, 70, 0.3);
             background: rgba(12, 12, 12, 0.92);
             backdrop-filter: blur(10px);
@@ -234,7 +249,9 @@
 
         <a
             class="version-button"
-            href="https://m.vk.ru/app54726598">
+            href="https://m.vk.ru/app54612661"
+            target="_blank"
+            rel="noopener noreferrer">
             📱 МОБИЛЬНАЯ ВЕРСИЯ
         </a>
 
@@ -252,7 +269,9 @@
 
     <script>
         if (window.vkBridge) {
-            vkBridge.send('VKWebAppInit').catch(console.error);
+            vkBridge.send('VKWebAppInit').catch(function(error) {
+                console.error('Ошибка VK Bridge:', error);
+            });
         }
     </script>
 
