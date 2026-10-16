@@ -14,8 +14,7 @@
             box-sizing: border-box;
         }
 
-        html,
-        body {
+        html, body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -25,7 +24,7 @@
             background: #111;
         }
 
-        /* Стартовый экран приложения */
+        /* Стартовый экран */
         .welcome-screen {
             position: fixed;
             inset: 0;
@@ -51,7 +50,7 @@
             letter-spacing: 1px;
         }
 
-        /* Общий стиль кнопок */
+        /* Кнопки */
         .version-button {
             display: flex;
             align-items: center;
@@ -75,12 +74,9 @@
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
 
-            transition:
-                transform 0.15s ease,
-                opacity 0.15s ease;
+            transition: transform 0.15s ease, opacity 0.15s ease;
         }
 
-        /* Эффект нажатия */
         .version-button:active {
             transform: scale(0.97);
             opacity: 0.85;
@@ -114,7 +110,7 @@
             background: #262626;
         }
 
-        /* Ссылка автора */
+        /* Автор приложения */
         .author {
             font-family: Arial, sans-serif;
             font-size: 10px;
@@ -150,15 +146,15 @@
             }
         }
 
-        /* Адаптация для маленьких экранов */
+        /* Маленькие экраны */
         @media (max-width: 360px) {
             .welcome-title {
                 font-size: 22px;
             }
 
             .version-button {
-                font-size: 14px;
                 min-height: 54px;
+                font-size: 14px;
             }
         }
     </style>
@@ -166,23 +162,23 @@
 
 <body>
 
-    <!-- Стартовый экран: кнопки не накладываются на плеер -->
+    <!-- Стартовый экран -->
     <main class="welcome-screen">
 
         <div class="welcome-title">
             MUZER play
         </div>
 
-        <!-- Мобильная версия открывается в новой вкладке -->
+        <!-- Мобильная версия -->
         <a
             class="version-button mobile-button"
-            href="https://m.vk.ru/games/app54612661"
+            href="https://m.vk.ru/games/app54612661?section_type=public_r_app"
             target="_blank"
             rel="noopener noreferrer">
             📱 МОБИЛЬНАЯ ВЕРСИЯ
         </a>
 
-        <!-- ПК версия открывается в новой вкладке -->
+        <!-- ПК версия: адрес указан без мобильного домена -->
         <a
             class="version-button pc-button"
             href="https://vk.ru/games/app54612661"
@@ -193,7 +189,7 @@
 
     </main>
 
-    <!-- Нижняя полоска с автором -->
+    <!-- Нижняя полоска -->
     <footer class="bottom-bar">
         <a
             class="author"
@@ -204,7 +200,7 @@
         </a>
     </footer>
 
-    <!-- Инициализация VK Bridge -->
+    <!-- VK Bridge -->
     <script>
         async function initApp() {
             try {
