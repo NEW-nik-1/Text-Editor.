@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>MUZER play VK Mini App</title>
 
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
@@ -13,7 +14,8 @@
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -23,7 +25,7 @@
             background: #111;
         }
 
-        /* Экран входа */
+        /* Стартовый экран приложения */
         .welcome-screen {
             position: fixed;
             inset: 0;
@@ -35,19 +37,21 @@
             justify-content: center;
             gap: 16px;
 
-            padding: 20px;
-            padding-bottom: 48px;
+            padding: 20px 20px 48px;
             background: #111;
         }
 
+        /* Название приложения */
         .welcome-title {
+            margin-bottom: 12px;
             color: #fff;
-            font-size: 23px;
+            font-size: 26px;
             font-weight: bold;
             text-align: center;
-            margin-bottom: 12px;
+            letter-spacing: 1px;
         }
 
+        /* Общий стиль кнопок */
         .version-button {
             display: flex;
             align-items: center;
@@ -62,23 +66,32 @@
             border-radius: 14px;
 
             color: #fff;
+            font-family: Arial, sans-serif;
             font-size: 16px;
             font-weight: bold;
-            text-decoration: none;
             text-align: center;
+            text-decoration: none;
 
-            transition: transform 0.15s, opacity 0.15s;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+
+            transition:
+                transform 0.15s ease,
+                opacity 0.15s ease;
         }
 
+        /* Эффект нажатия */
         .version-button:active {
             transform: scale(0.97);
             opacity: 0.85;
         }
 
+        /* Мобильная версия */
         .mobile-button {
             background: #0077ff;
         }
 
+        /* ПК версия */
         .pc-button {
             background: #303030;
             border: 1px solid #555;
@@ -87,50 +100,101 @@
         /* Нижняя полоска */
         .bottom-bar {
             position: fixed;
-            bottom: 0;
             left: 0;
+            bottom: 0;
             z-index: 10001;
+
+            display: flex;
+            align-items: center;
 
             width: 100%;
             height: 28px;
             padding-left: 10px;
 
-            display: flex;
-            align-items: center;
-
             background: #262626;
         }
 
+        /* Ссылка автора */
         .author {
-            color: #fff;
+            font-family: Arial, sans-serif;
             font-size: 10px;
+            font-weight: 400;
+            color: transparent;
             text-decoration: none;
+
+            background: linear-gradient(
+                90deg,
+                #aaa,
+                #fff,
+                #aaa,
+                #fff,
+                #aaa
+            );
+
+            background-size: 300% 100%;
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            animation: wave 3s linear infinite;
+            cursor: pointer;
+        }
+
+        @keyframes wave {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 300% 50%;
+            }
+        }
+
+        /* Адаптация для маленьких экранов */
+        @media (max-width: 360px) {
+            .welcome-title {
+                font-size: 22px;
+            }
+
+            .version-button {
+                font-size: 14px;
+                min-height: 54px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Кнопки только на стартовом экране -->
-    <div class="welcome-screen">
+    <!-- Стартовый экран: кнопки не накладываются на плеер -->
+    <main class="welcome-screen">
 
-        <div class="welcome-title">MUZER play</div>
+        <div class="welcome-title">
+            MUZER play
+        </div>
 
+        <!-- Мобильная версия открывается в новой вкладке -->
         <a
             class="version-button mobile-button"
-            href="https://m.vk.ru/games/app54612661?section_type=public_r_app">
+            href="https://m.vk.ru/games/app54612661?section_type=public_r_app"
+            target="_blank"
+            rel="noopener noreferrer">
             📱 МОБИЛЬНАЯ ВЕРСИЯ
         </a>
 
+        <!-- ПК версия открывается в новой вкладке -->
         <a
             class="version-button pc-button"
-            href="https://vk.ru/games/app54612661?section_type=public_r_app">
+            href="https://vk.ru/games/app54612661?section_type=public_r_app"
+            target="_blank"
+            rel="noopener noreferrer">
             💻 ПК ВЕРСИЯ
         </a>
 
-    </div>
+    </main>
 
-    <div class="bottom-bar">
+    <!-- Нижняя полоска с автором -->
+    <footer class="bottom-bar">
         <a
             class="author"
             href="https://vk.ru/muzer_play"
@@ -138,12 +202,14 @@
             rel="noopener noreferrer">
             Автор приложения
         </a>
-    </div>
+    </footer>
 
+    <!-- Инициализация VK Bridge -->
     <script>
         async function initApp() {
             try {
                 await vkBridge.send('VKWebAppInit');
+                console.log('VK Bridge инициализирован');
             } catch (e) {
                 console.error('Ошибка VK Bridge:', e);
             }
