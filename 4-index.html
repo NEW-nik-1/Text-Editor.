@@ -1,1 +1,575 @@
-////
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music Club Золушка</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    background: #18002e;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+/* Радио на весь экран */
+.radio-container {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.radio-container iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+}
+
+/* Гирлянда */
+.garland {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 100%;
+    height: 24px;
+    padding: 7px 3px 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.bulb {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    opacity: 0.25;
+    animation: discoRandom var(--speed, 1s) infinite alternate;
+    animation-delay: var(--delay, 0s);
+}
+
+.bulb:nth-child(4n+1) {
+    background: #ff1744;
+    box-shadow: 0 0 5px #ff1744;
+}
+
+.bulb:nth-child(4n+2) {
+    background: #00e5ff;
+    box-shadow: 0 0 5px #00e5ff;
+}
+
+.bulb:nth-child(4n+3) {
+    background: #ffee00;
+    box-shadow: 0 0 5px #ffee00;
+}
+
+.bulb:nth-child(4n) {
+    background: #00ff66;
+    box-shadow: 0 0 5px #00ff66;
+}
+
+@keyframes discoRandom {
+    0% {
+        opacity: 0.15;
+        transform: scale(0.8);
+    }
+    35% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+    65% {
+        opacity: 0.3;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+.garland.off .bulb {
+    animation: none;
+    opacity: 0;
+}
+
+/* Кнопки меню */
+.menu {
+    position: fixed;
+    top: 27px;
+    left: 0;
+    width: 100%;
+    z-index: 25;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 3px;
+    background: transparent;
+}
+
+.menu-button {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    background: linear-gradient(to bottom, #ffffff, #bdbdbd);
+    color: #333333;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.menu-button:hover,
+.menu-button:focus {
+    background: #dddddd;
+    color: #222222;
+    outline: none;
+}
+
+/* Выпадающее меню */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 155px;
+    z-index: 30;
+    padding: 4px;
+    background: #eeeeee;
+    border: 1px solid #aaaaaa;
+    border-radius: 6px;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 8px;
+    color: #333333;
+    text-decoration: none;
+    text-align: left;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.dropdown-content a:hover {
+    background: #cccccc;
+}
+
+.dropdown:hover .dropdown-content,
+.dropdown:focus-within .dropdown-content {
+    display: block;
+}
+
+/* Игровое окно */
+.game-window {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(95vw, 1000px);
+    height: min(85vh, 700px);
+    z-index: 100;
+    background: #ffffff;
+    border: 2px solid #aaaaaa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    height: 42px;
+    padding: 5px 10px;
+    background: #dddddd;
+    color: #333333;
+    font-weight: bold;
+}
+
+.game-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.game-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.game-controls button,
+.restore-game {
+    padding: 5px 10px;
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+    background: #dddddd;
+    color: #333333;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.game-controls button:hover,
+.restore-game:hover {
+    background: #c5c5c5;
+}
+
+.game-window iframe {
+    display: block;
+    width: 100%;
+    height: calc(100% - 42px);
+    border: none;
+}
+
+/* Кнопка возврата к игре */
+.restore-game {
+    display: none;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    z-index: 101;
+    padding: 8px 12px;
+    font-weight: bold;
+}
+
+/* Мобильная версия */
+@media (max-width: 600px) {
+    .garland {
+        height: 22px;
+        padding-top: 6px;
+    }
+
+    .bulb {
+        width: 6px;
+        height: 6px;
+    }
+
+    .menu {
+        top: 24px;
+        gap: 4px;
+        padding: 3px;
+    }
+
+    .menu-button {
+        padding: 5px 7px;
+        font-size: 10px;
+    }
+
+    .game-window {
+        width: 96vw;
+        height: 80vh;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Подключение VK Bridge -->
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+
+<!-- Радио на весь экран -->
+<div class="radio-container">
+    <iframe
+        src="https://m.volnorez.com/music-club-zolushka?slide=2"
+        title="Music Club Золушка — радио"
+        allow="autoplay">
+    </iframe>
+</div>
+
+<!-- Гирлянда: 24 лампочки -->
+<div class="garland" id="garland">
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+    <span class="bulb"></span>
+</div>
+
+<!-- Кнопки поверх радио -->
+<nav class="menu">
+
+    <button class="menu-button" id="garlandButton" type="button">
+        💡 Мигание: Обычное
+    </button>
+
+    <div class="dropdown">
+        <button class="menu-button" type="button">
+            🎮 Игры ▼
+        </button>
+
+        <div class="dropdown-content">
+
+            <a href="#"
+               onclick="openGame('Дурак', 'https://stage-app51417437-c1db6116afb9.pages.vk-apps.ru/durak1710.html'); return false;">
+                🎲 Дурак
+            </a>
+
+            <a href="#"
+               onclick="openGame('Skytrip', 'https://storage.y8.com/y8-studio/html5/naram/skytrip_2024_08_29/'); return false;">
+                🎲 Skytrip
+            </a>
+
+        </div>
+    </div>
+
+    <a class="menu-button"
+       href="https://volnorez.com/music-club-zolushka"
+       target="_blank"
+       rel="noopener">
+        🌐 сайт радио
+    </a>
+
+    <a class="menu-button"
+       href="https://m.volnorez.com/music-club-zolushka?slide=2"
+       target="_blank"
+       rel="noopener">
+        🌐 мобильная версия
+    </a>
+
+</nav>
+
+<!-- Игровое окно -->
+<div class="game-window" id="gameWindow">
+
+    <div class="game-header">
+
+        <span class="game-title" id="gameTitle">Игра</span>
+
+        <div class="game-controls">
+            <button type="button"
+                    onclick="minimizeGame()"
+                    title="Свернуть">—</button>
+
+            <button type="button"
+                    onclick="closeGame()"
+                    title="Закрыть">✕</button>
+        </div>
+
+    </div>
+
+    <iframe
+        id="gameFrame"
+        src="about:blank"
+        title="Игровое окно">
+    </iframe>
+
+</div>
+
+<!-- Кнопка возврата к игре -->
+<button
+    class="restore-game"
+    id="restoreGame"
+    type="button"
+    onclick="restoreGame()">
+    🎮 Вернуться к игре
+</button>
+
+<script>
+
+/* =================================
+   ИНИЦИАЛИЗАЦИЯ VK BRIDGE
+================================= */
+
+async function initApp() {
+    try {
+        await vkBridge.send('VKWebAppInit');
+        console.log('VK Bridge инициализирован');
+    } catch (e) {
+        console.error('Ошибка VK Bridge:', e);
+    }
+}
+
+initApp();
+
+
+/* =================================
+   РЕЖИМЫ ГИРЛЯНДЫ
+================================= */
+
+const garlandModes = [
+    { name: "Обычное", speed: 1.2 },
+    { name: "Быстрое", speed: 0.4 },
+    { name: "Медленное", speed: 2.5 },
+    { name: "Волна", speed: 1.8 },
+    { name: "По очереди", speed: 0.8 },
+    { name: "Дискотека", speed: 0.3 },
+    { name: "Медляк", speed: 3.5 },
+    { name: "Клубный", speed: 0.65 },
+    { name: "Искры", speed: 2 },
+    { name: "Экономный", speed: 4 },
+    { name: "Ухожу гашу свет", speed: 0, off: true }
+];
+
+const garland = document.getElementById("garland");
+const garlandButton = document.getElementById("garlandButton");
+const bulbs = document.querySelectorAll(".garland .bulb");
+
+let currentMode = 0;
+
+
+/* Независимое мигание лампочек */
+function setBulbAnimations() {
+
+    const mode = garlandModes[currentMode];
+
+    if (mode.off) {
+        garland.classList.add("off");
+        garlandButton.textContent = "🌙 Ухожу гашу свет";
+        return;
+    }
+
+    garland.classList.remove("off");
+
+    garlandButton.textContent = "💡 Мигание: " + mode.name;
+
+    bulbs.forEach((bulb) => {
+
+        const randomSpeed =
+            mode.speed * (0.55 + Math.random() * 1.5);
+
+        const randomDelay = Math.random() * -2.5;
+
+        bulb.style.setProperty(
+            "--speed",
+            randomSpeed + "s"
+        );
+
+        bulb.style.setProperty(
+            "--delay",
+            randomDelay + "s"
+        );
+
+    });
+}
+
+
+/* Переключение режимов */
+garlandButton.addEventListener("click", function() {
+
+    currentMode =
+        (currentMode + 1) % garlandModes.length;
+
+    setBulbAnimations();
+
+});
+
+
+/* =================================
+   ИГРОВОЕ ОКНО
+================================= */
+
+const gameWindow =
+    document.getElementById("gameWindow");
+
+const gameFrame =
+    document.getElementById("gameFrame");
+
+const gameTitle =
+    document.getElementById("gameTitle");
+
+const restoreButton =
+    document.getElementById("restoreGame");
+
+
+/* Открыть игру */
+function openGame(title, url) {
+
+    gameTitle.textContent = title;
+
+    gameFrame.src = url;
+
+    gameWindow.style.display = "block";
+
+    restoreButton.style.display = "none";
+
+}
+
+
+/* Свернуть игру */
+function minimizeGame() {
+
+    gameWindow.style.display = "none";
+
+    restoreButton.style.display = "block";
+
+}
+
+
+/* Вернуться к игре */
+function restoreGame() {
+
+    gameWindow.style.display = "block";
+
+    restoreButton.style.display = "none";
+
+}
+
+
+/* Закрыть игру */
+function closeGame() {
+
+    gameWindow.style.display = "none";
+
+    restoreButton.style.display = "none";
+
+    gameFrame.src = "about:blank";
+
+}
+
+
+/* =================================
+   ЗАПУСК
+================================= */
+
+setBulbAnimations();
+
+</script>
+
+</body>
+</html>
